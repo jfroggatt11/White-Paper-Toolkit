@@ -1,16 +1,58 @@
-# React + Vite
+# PDATF Toolkit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive toolkit for exploring barrier themes and resources in the PDATF project. Built with React, Vite, and Recharts.
 
-Currently, two official plugins are available:
+## Features
+- Interactive donut chart visualization of themes and barriers
+- Search and filter resources by title, description, tags, and personas
+- Select inner (themes) or outer (barriers) ring segments to filter results
+- Responsive design with sticky header and scrollable results pane
+- Data sourced from Google Sheets and transformed at build time
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Recharts](https://recharts.org/)
+- [TailwindCSS](https://tailwindcss.com/) for styling
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Install dependencies
+```bash
+npm install
 
-## Expanding the ESLint configuration
+Run locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+npm run dev
+
+Build for production
+
+npm run build
+
+Preview production build
+
+npm run preview
+
+Deployment
+
+This project is configured for deployment on Netlify.
+	•	Build command: npm run build
+	•	Publish directory: dist
+
+For single-page app routing, include a _redirects file in public/ with:
+
+/*  /index.html  200
+
+Environment Variables
+
+At build time, the script scripts/build-data.mjs fetches data from published Google Sheets.
+
+Set these environment variables in Netlify or your local .env file:
+	•	RESOURCES_CSV_URL
+	•	BARRIER_THEMES_CSV_URL
+	•	BARRIERS_CSV_URL
+
+License
+
+MIT License
+
