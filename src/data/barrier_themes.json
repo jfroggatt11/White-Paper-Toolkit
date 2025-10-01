@@ -1,0 +1,32 @@
+[
+  {
+    "id": "leadership-and-alignment",
+    "name": "Leadership & Alignment",
+    "order": "1"
+  },
+  {
+    "id": "data-pooling-and-interoperability",
+    "name": "Data Pooling & Interoperability",
+    "order": "2"
+  },
+  {
+    "id": "digital-and-tech-constraints",
+    "name": "Digital & Tech Constraints",
+    "order": "3"
+  },
+  {
+    "id": "skill-and-culture-gaps",
+    "name": "Skill & Culture Gaps",
+    "order": "4"
+  },
+  {
+    "id": "procurement-and-commercial-models",
+    "name": "Procurement & Commercial Models",
+    "order": "5"
+  },
+  {
+    "id": "risk-ethics-and-assurance",
+    "name": "Risk, Ethics & Assurance",
+    "order": "6"
+  }
+]

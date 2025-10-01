@@ -1,0 +1,117 @@
+[
+  {
+    "id": "leadership-and-alignment.vision-without-business-case",
+    "name": "Vision without business case",
+    "themeId": "leadership-and-alignment"
+  },
+  {
+    "id": "leadership-and-alignment.fragmented-governance",
+    "name": "Fragmented governance",
+    "themeId": "leadership-and-alignment"
+  },
+  {
+    "id": "leadership-and-alignment.risk-appetite-and-trust",
+    "name": "Risk appetite & trust",
+    "themeId": "leadership-and-alignment"
+  },
+  {
+    "id": "leadership-and-alignment.misaligned-metrics",
+    "name": "Misaligned metrics",
+    "themeId": "leadership-and-alignment"
+  },
+  {
+    "id": "data-pooling-and-interoperability.incompatible-data-formats",
+    "name": "Incompatible data formats",
+    "themeId": "data-pooling-and-interoperability"
+  },
+  {
+    "id": "data-pooling-and-interoperability.lack-of-trusted-sharing-framework",
+    "name": "Lack of trusted sharing framework",
+    "themeId": "data-pooling-and-interoperability"
+  },
+  {
+    "id": "data-pooling-and-interoperability.privacy-and-ip-concerns",
+    "name": "Privacy & IP concerns",
+    "themeId": "data-pooling-and-interoperability"
+  },
+  {
+    "id": "digital-and-tech-constraints.legacy-systems-and-technical-debt",
+    "name": "Legacy systems & technical debt",
+    "themeId": "digital-and-tech-constraints"
+  },
+  {
+    "id": "digital-and-tech-constraints.vendor-lock-in-and-closed-architectures",
+    "name": "Vendor lock-in & closed architectures",
+    "themeId": "digital-and-tech-constraints"
+  },
+  {
+    "id": "digital-and-tech-constraints.under-investment-in-cloud-data-foundations",
+    "name": "Under-investment in cloud/data foundations",
+    "themeId": "digital-and-tech-constraints"
+  },
+  {
+    "id": "digital-and-tech-constraints.lack-of-apis",
+    "name": "Lack of APIs / API access",
+    "themeId": "digital-and-tech-constraints"
+  },
+  {
+    "id": "skill-and-culture-gaps.technical-supply",
+    "name": "Technical supply",
+    "themeId": "skill-and-culture-gaps"
+  },
+  {
+    "id": "skill-and-culture-gaps.ai-fluency-in-delivery-roles",
+    "name": "AI fluency in delivery roles",
+    "themeId": "skill-and-culture-gaps"
+  },
+  {
+    "id": "skill-and-culture-gaps.cultural-resistance",
+    "name": "Cultural resistance",
+    "themeId": "skill-and-culture-gaps"
+  },
+  {
+    "id": "skill-and-culture-gaps.patchy-cpd-pathways",
+    "name": "Patchy CPD pathways",
+    "themeId": "skill-and-culture-gaps"
+  },
+  {
+    "id": "procurement-and-commercial-models.outcome-blindness",
+    "name": "Outcome blindness",
+    "themeId": "procurement-and-commercial-models"
+  },
+  {
+    "id": "procurement-and-commercial-models.ip-and-liability-grey-zones",
+    "name": "IP & liability grey zones",
+    "themeId": "procurement-and-commercial-models"
+  },
+  {
+    "id": "procurement-and-commercial-models.lack-of-ai-ready-clauses-and-routes-to-market",
+    "name": "Lack of AI-ready clauses & routes to market",
+    "themeId": "procurement-and-commercial-models"
+  },
+  {
+    "id": "risk-ethics-and-assurance.fragmented-governance-and-unclear-accountability",
+    "name": "Fragmented governance & unclear accountability",
+    "themeId": "risk-ethics-and-assurance"
+  },
+  {
+    "id": "risk-ethics-and-assurance.absence-of-embedded-ethical-processes",
+    "name": "Absence of embedded ethical processes",
+    "themeId": "risk-ethics-and-assurance"
+  },
+  {
+    "id": "risk-ethics-and-assurance.lack-of-structured-assurance-mechanisms",
+    "name": "Lack of structured assurance mechanisms",
+    "themeId": "risk-ethics-and-assurance"
+  },
+  {
+    "id": "risk-ethics-and-assurance.innovation-bottlenecks-through-over-regulation",
+    "name": "Innovation bottlenecks through over-regulation",
+    "themeId": "risk-ethics-and-assurance"
+  },
+  {
+    "id": "risk-ethics-and-assurance.insufficient-use-of-guidance",
+    "name": "Insufficient use of guidance (Green/Magenta/Teal)",
+    "themeId": "risk-ethics-and-assurance"
+  }
+]

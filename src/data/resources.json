@@ -1,0 +1,218 @@
+[
+  {
+    "id": "govs002-standard",
+    "title": "Government Functional Standard GovS 002: Project Delivery",
+    "url": "https://www.gov.uk/government/publications/project-delivery-functional-standard",
+    "date": "",
+    "description": "Sets expectations for direction and management of portfolios, programmes and projects.",
+    "personas": [
+      "Programme",
+      "Project"
+    ],
+    "barriers": [
+      "leadership-and-alignment.fragmented-governance",
+      "leadership-and-alignment.misaligned-metrics"
+    ],
+    "barrier_category": "leadership-and-alignment",
+    "tags": [
+      "governance",
+      "standards"
+    ],
+    "publisher": "Cabinet Office",
+    "type": "guidance"
+  },
+  {
+    "id": "national-data-strategy",
+    "title": "National Data Strategy",
+    "url": "https://www.gov.uk/guidance/national-data-strategy",
+    "date": "",
+    "description": "UK strategy for data use, trust and growth.",
+    "personas": [
+      "Business",
+      "Programme"
+    ],
+    "barriers": [
+      "data-pooling-and-interoperability.lack-of-trusted-sharing-framework",
+      "data-pooling-and-interoperability.privacy-and-ip-concerns"
+    ],
+    "barrier_category": "data-pooling-and-interoperability",
+    "tags": [
+      "strategy",
+      "data"
+    ],
+    "publisher": "DSIT",
+    "type": "guidance"
+  },
+  {
+    "id": "nuar-guidance",
+    "title": "National Underground Asset Register (NUAR) guidance",
+    "url": "https://www.gov.uk/guidance/national-underground-asset-register-nuar",
+    "date": "",
+    "description": "Secure, trusted data sharing for buried assets.",
+    "personas": [
+      "Programme",
+      "Project"
+    ],
+    "barriers": [
+      "data-pooling-and-interoperability.lack-of-trusted-sharing-framework",
+      "data-pooling-and-interoperability.privacy-and-ip-concerns"
+    ],
+    "barrier_category": "data-pooling-and-interoperability",
+    "tags": [
+      "data-sharing",
+      "case-study"
+    ],
+    "publisher": "Geospatial Commission",
+    "type": "case-study"
+  },
+  {
+    "id": "ifc-overview",
+    "title": "Industry Foundation Classes (IFC) – Overview",
+    "url": "https://www.buildingsmart.org/standards/bsi-standards/industry-foundation-classes/",
+    "date": "",
+    "description": "Open, vendor-neutral BIM data model (ISO 16739) for interoperability.",
+    "personas": [
+      "Project",
+      "Programme"
+    ],
+    "barriers": [
+      "data-pooling-and-interoperability.incompatible-data-formats"
+    ],
+    "barrier_category": "data-pooling-and-interoperability",
+    "tags": [
+      "open-standards",
+      "BIM"
+    ],
+    "publisher": "buildingSMART International",
+    "type": "guidance"
+  },
+  {
+    "id": "technology-code-of-practice",
+    "title": "Technology Code of Practice",
+    "url": "https://www.gov.uk/guidance/the-technology-code-of-practice",
+    "date": "",
+    "description": "Criteria to help design, build and buy technology.",
+    "personas": [
+      "Project",
+      "Programme"
+    ],
+    "barriers": [
+      "digital-and-tech-constraints.vendor-lock-in-and-closed-architectures",
+      "digital-and-tech-constraints.under-investment-in-cloud-data-foundations"
+    ],
+    "barrier_category": "digital-and-tech-constraints",
+    "tags": [
+      "standards",
+      "architecture"
+    ],
+    "publisher": "GDS / CDDO",
+    "type": "guidance"
+  },
+  {
+    "id": "construction-playbook",
+    "title": "The Construction Playbook",
+    "url": "https://www.gov.uk/government/publications/the-construction-playbook",
+    "date": "",
+    "description": "Policies and guidance for assessing, procuring and delivering public works.",
+    "personas": [
+      "Programme",
+      "Business"
+    ],
+    "barriers": [
+      "procurement-and-commercial-models.outcome-blindness",
+      "procurement-and-commercial-models.ip-and-liability-grey-zones"
+    ],
+    "barrier_category": "procurement-and-commercial-models",
+    "tags": [
+      "procurement",
+      "delivery"
+    ],
+    "publisher": "Cabinet Office",
+    "type": "guidance"
+  },
+  {
+    "id": "ppn-02-24",
+    "title": "PPN 02/24: Improving transparency of AI use in procurement",
+    "url": "https://www.gov.uk/government/publications/ppn-0224-improving-transparency-of-ai-use-in-procurement",
+    "date": "",
+    "description": "Optional questions and controls to identify and manage supplier use of AI.",
+    "personas": [
+      "Programme",
+      "Business"
+    ],
+    "barriers": [
+      "procurement-and-commercial-models.lack-of-ai-ready-clauses-and-routes-to-market"
+    ],
+    "barrier_category": "procurement-and-commercial-models",
+    "tags": [
+      "procurement",
+      "AI"
+    ],
+    "publisher": "Cabinet Office",
+    "type": "doc"
+  },
+  {
+    "id": "aisi-approach-to-evaluations",
+    "title": "AI Safety Institute: approach to evaluations",
+    "url": "https://www.gov.uk/government/publications/ai-safety-institute-approach-to-evaluations",
+    "date": "",
+    "description": "How the UK AI Safety Institute evaluates advanced AI systems.",
+    "personas": [
+      "Programme",
+      "Business"
+    ],
+    "barriers": [
+      "risk-ethics-and-assurance.lack-of-structured-assurance-mechanisms",
+      "risk-ethics-and-assurance.innovation-bottlenecks-through-over-regulation"
+    ],
+    "barrier_category": "risk-ethics-and-assurance",
+    "tags": [
+      "assurance",
+      "safety"
+    ],
+    "publisher": "AI Safety Institute",
+    "type": "guidance"
+  },
+  {
+    "id": "magenta-book",
+    "title": "The Magenta Book: Evaluation in Government",
+    "url": "https://www.gov.uk/government/publications/the-magenta-book",
+    "date": "",
+    "description": "Evaluation guidance aligned with the Green Book.",
+    "personas": [
+      "Programme",
+      "Business"
+    ],
+    "barriers": [
+      "risk-ethics-and-assurance.insufficient-use-of-guidance"
+    ],
+    "barrier_category": "risk-ethics-and-assurance",
+    "tags": [
+      "evaluation",
+      "guidance"
+    ],
+    "publisher": "HM Treasury",
+    "type": "guidance"
+  },
+  {
+    "id": "green-book-collection",
+    "title": "The Green Book and accompanying guidance",
+    "url": "https://www.gov.uk/government/collections/the-green-book-and-accompanying-guidance-and-documents",
+    "date": "",
+    "description": "Guidance on options appraisal and value for money.",
+    "personas": [
+      "Business",
+      "Programme"
+    ],
+    "barriers": [
+      "risk-ethics-and-assurance.insufficient-use-of-guidance"
+    ],
+    "barrier_category": "risk-ethics-and-assurance",
+    "tags": [
+      "appraisal",
+      "vfm"
+    ],
+    "publisher": "HM Treasury",
+    "type": "guidance"
+  }
+]
