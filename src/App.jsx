@@ -246,9 +246,12 @@ export default function App() {
         </section>
 
         {/* Center: ring */}
-        <section className="lg:col-span-8 lg:row-start-2 bg-white border border-slate-200 rounded-3xl shadow-md/10 p-2 pb-0 h-full min-h-0 flex flex-col">
+        <section className="lg:col-span-8 lg:row-start-2 bg-white border border-slate-200 rounded-3xl shadow-md/10 p-2 pb-0 h-[52vh] lg:h-full min-h-0 flex flex-col">
           <div className="flex items-center justify-between mb-2 text-xs text-slate-600 h-5">
-            <div>Click the inner ring (themes) or the outer ring (barriers) to filter.</div>
+            <div>
+              <span className="hidden lg:inline">Click the inner ring (themes) or the outer ring (barriers) to filter.</span>
+              <span className="lg:hidden">Tap a theme (inner) or barrier (outer); results are listed below.</span>
+            </div>
             <div className="truncate max-w-[60%] text-right">
               {selectedTheme && <span>Selected: <span className="font-medium">Theme — {selectedThemeLabel}</span></span>}
               {selectedBarrier && <span>Selected: <span className="font-medium">Barrier — {selectedBarrierLabel}</span></span>}
@@ -265,14 +268,14 @@ export default function App() {
               }}
               /> 
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={{ top: 0, right: 8, bottom: 0, left: 8 }}>
+              <PieChart margin={{ top: 2, right: 4, bottom: 2, left: 4 }}>
                 {/* Inner ring: themes (exact sum of its barriers) */}
                 <Pie
                   data={themeData}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={100}
-                  outerRadius={165}
+                  innerRadius="32%"
+                  outerRadius="48%"
                   startAngle={90}
                   endAngle={-270}  // clockwise
                   cx="50%"
@@ -305,8 +308,8 @@ export default function App() {
                   data={barrierData}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={180}
-                  outerRadius={240}
+                  innerRadius="52%"
+                  outerRadius="75%"
                   startAngle={90}
                   endAngle={-270}
                   cx="50%"
@@ -370,10 +373,10 @@ export default function App() {
         </section>
 
         {/* Right: results */}
-        <section className="lg:col-span-4 lg:row-span-2 flex min-h-0 h-full">
+        <section className="lg:col-span-4 lg:row-span-2 flex min-h-0 lg:h-full">
           <div className="bg-white border border-slate-200 rounded-3xl shadow-md/10 p-4 w-full flex flex-col h-full">
             <div className="text-sm mb-2 shrink-0 sticky top-0 bg-white z-10 border-b border-slate-100 py-2"><span className="font-medium">{filtered.length}</span> result{filtered.length === 1 ? "" : "s"}</div>
-            <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-3">
+            <div className="flex-1 min-h-0 lg:overflow-y-auto overflow-visible pr-1 space-y-3">
               {filtered.map((r) => (
                 <article key={r.id} className="bg-white border border-slate-200 rounded-3xl shadow-md/10 p-4">
                   <h3 className="font-medium leading-snug">{r.title}</h3>
