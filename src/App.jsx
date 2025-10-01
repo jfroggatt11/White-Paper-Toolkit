@@ -194,7 +194,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen lg:overflow-hidden">
       {/* Small header with just title */}
       <header ref={headerRef} className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur text-white py-2 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 text-center">
@@ -204,8 +204,7 @@ export default function App() {
 
       {/* Main content */}
       <main
-        className="max-w-7xl mx-auto px-4 py-2 grid lg:grid-cols-12 lg:grid-rows-[auto,1fr] gap-2"
-        style={{ height: 'calc(100svh - var(--hdr))' }}
+        className="max-w-7xl mx-auto px-4 py-2 grid lg:grid-cols-12 lg:grid-rows-[auto,1fr] gap-2 lg:h-[calc(100svh-var(--hdr))]"
       >
         {/* Filters card (search + personas) spans above ring */}
         <section className="lg:col-span-8 lg:row-start-1 bg-white border border-slate-200 rounded-3xl shadow-md/10 p-2">
@@ -373,7 +372,7 @@ export default function App() {
         </section>
 
         {/* Right: results */}
-        <section className="lg:col-span-4 lg:row-span-2 flex min-h-0 lg:h-full">
+        <section className="lg:col-span-4 lg:row-span-2 flex min-h-0 w-full lg:h-full">
           <div className="bg-white border border-slate-200 rounded-3xl shadow-md/10 p-4 w-full flex flex-col h-full">
             <div className="text-sm mb-2 shrink-0 sticky top-0 bg-white z-10 border-b border-slate-100 py-2"><span className="font-medium">{filtered.length}</span> result{filtered.length === 1 ? "" : "s"}</div>
             <div className="flex-1 min-h-0 lg:overflow-y-auto overflow-visible pr-1 space-y-3">
