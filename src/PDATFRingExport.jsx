@@ -172,11 +172,12 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
   const cx = Math.floor(W / 2), cy = Math.floor(H / 2);
 
   // Radii tuned for A4 portrait
-  const innerR0 = 520, innerR1 = 740;    // inner theme ring
-  const outerR0 = 760, outerR1 = 1120;   // outer barrier ring
+  const innerR0 = 300, innerR1 = 560;    // inner theme ring
+  const outerR0 = 620, outerR1 = 1240;   // outer barrier ring
 
-  const TEXT_PAD_DEG = 7; // shrink label arc by ±7°
-  const INNER_TEXT_PAD_DEG = 2; // inner labels hug boundaries more closely
+
+  const TEXT_PAD_DEG = 2; // shrink label arc by ±7°
+  const INNER_TEXT_PAD_DEG = 1; // inner labels hug boundaries more closely
 
   // Helper to build a polyline path along the ellipse between two angles at radius r,
   // reversing direction when on the bottom half so text stays upright.
@@ -230,12 +231,34 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
     return buildTextPathOriented(A0, A1, r, isBottomForced);
   }
 
+  function approximateTextPathLength(a0, a1, r, padDeg = 0) {
+    const pad = (padDeg || 0) * Math.PI / 180;
+    let s = a0; let e = a1;
+    if (e < s) { const t = s; s = e; e = t; }
+    const dir = (a1 - a0) >= 0 ? 1 : -1;
+    const A0 = dir > 0 ? s + pad : e - pad;
+    const A1 = dir > 0 ? e - pad : s + pad;
+    const steps = Math.max(12, Math.ceil(Math.abs(A1 - A0) / (6 * (Math.PI / 180))));
+    let length = 0;
+    let prev = null;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const a = A0 + (A1 - A0) * t;
+      const point = ellipsePoint(cx, cy, r, a, ellipticalStretch);
+      if (prev) {
+        length += Math.hypot(point[0] - prev[0], point[1] - prev[1]);
+      }
+      prev = point;
+    }
+    return length;
+  }
+
   // Greedy word wrap to N lines based on an approximate width model for Inter
   function wrapToLines(text, maxWidthPx, maxLines, fontPx) {
     const words = text.trim().split(/\s+/);
     const lines = [];
     let line = "";
-    const charPx = fontPx * 0.55; // average glyph width for Inter/Arial
+    const charPx = fontPx * 0.6; // conservative glyph width estimate
     const measure = (s) => s.length * charPx;
     for (let w of words) {
       const test = line ? line + " " + w : w;
@@ -260,8 +283,54 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
   }
 
   // IDs for textPaths
-  const idInner = (i) => `inner-arc-${i}`;
+  const idInner = (segmentIndex, lineIndex = 0) => `inner-arc-${segmentIndex}-${lineIndex}`;
   const idOuter = (i) => `outer-arc-${i}`;
+
+  const innerLabelLayouts = useMemo(() => {
+    const INNER_FONT_MAX = 44;
+    const MAX_INNER_LINES = 3;
+    return data.innerSegments.map((seg) => {
+      const theme = data.themesOrdered.find((t) => t.id === seg.themeId);
+      const themeName = (theme?.name || "").trim();
+      const labelText = showNumbers ? `${seg.themeOrder}. ${themeName}` : themeName;
+      const baseRadius = innerR0 + 0.55 * (innerR1 - innerR0);
+      const margin = 22;
+      const approxWidth = (text, size) => text.length * size * 0.6;
+      const arcLength = (radius) => approximateTextPathLength(seg.a0, seg.a1, radius, INNER_TEXT_PAD_DEG);
+      const clampRadius = (r) => Math.min(innerR1 - margin, Math.max(innerR0 + margin, r));
+
+      let fallback = null;
+      for (let font = INNER_FONT_MAX; font >= 14; font -= 1) {
+        let linesCandidate = wrapToLines(labelText, arcLength(baseRadius) * 0.94, MAX_INNER_LINES, font);
+        if (!linesCandidate.length) linesCandidate = [labelText || ""];
+        const lineGap = font * (linesCandidate.length > 1 ? 1.06 : 1.0);
+        const n = linesCandidate.length || 1;
+        const rawRadii = linesCandidate.map((_, idx) => {
+          const offset = ((n - 1) / 2 - idx) * lineGap;
+          return baseRadius + offset;
+        });
+        const radiiClamped = rawRadii.map(clampRadius);
+        const spacingOk = n <= 1 || radiiClamped.every((radius, idx) => {
+          if (idx === 0) return true;
+          return Math.abs(radius - radiiClamped[idx - 1]) >= font * 0.6;
+        });
+        const widthsOk = linesCandidate.every((line, idx) => {
+          const usableArc = arcLength(radiiClamped[idx] ?? baseRadius);
+          return approxWidth(line, font) <= usableArc * 0.92;
+        });
+        const lengths = radiiClamped.map((radius) => arcLength(radius));
+        const layout = { fontSize: font, lines: linesCandidate, radii: radiiClamped, lengths };
+        if (!fallback) fallback = layout;
+        if (widthsOk && spacingOk) {
+          return layout;
+        }
+      }
+
+      if (fallback) return fallback;
+      const safeRadius = clampRadius(baseRadius);
+      return { fontSize: 16, lines: [labelText || ""], radii: [safeRadius], lengths: [arcLength(safeRadius)] };
+    });
+  }, [data.innerSegments, data.themesOrdered, showNumbers, innerR0, innerR1, INNER_TEXT_PAD_DEG, cx, cy, ellipticalStretch]);
 
   return (
     <svg ref={ref} width={W} height={H} viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg">
@@ -272,9 +341,12 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
 
       <defs>
         {data.innerSegments.map((seg, i) => {
-          const rMid = (innerR0 + innerR1) / 2;
-          const d = buildTextPathOrientedPadded(seg.a0, seg.a1, rMid, undefined, INNER_TEXT_PAD_DEG);
-          return <path key={i} id={idInner(i)} d={d} fill="none" />;
+          const layout = innerLabelLayouts[i];
+          if (!layout) return null;
+          return layout.radii.map((radius, lineIdx) => {
+            const d = buildTextPathOrientedPadded(seg.a0, seg.a1, radius, undefined, INNER_TEXT_PAD_DEG);
+            return <path key={`${i}-${lineIdx}`} id={idInner(i, lineIdx)} d={d} fill="none" />;
+          });
         })}
         {ringSelection !== "inner" && data.outerSegments.map((seg, i) => {
           const rMid = (outerR0 + outerR1) / 2;
@@ -298,32 +370,27 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
 
       {/* Theme labels (draw last so they sit above the outer ring) */}
       {data.innerSegments.map((seg, i) => {
-        const rMid = innerR0 + 0.58 * (innerR1 - innerR0); // same inward nudge for clearance
-        const pad = (INNER_TEXT_PAD_DEG * Math.PI) / 180;
-        const span = Math.abs(seg.a1 - seg.a0);
-        const usableArc = Math.max(0, (span - 2 * pad) * rMid); // approximate arc length in px
-        const theme = data.themesOrdered.find((t) => t.id === seg.themeId);
-        const themeName = theme?.name || "";
-        const labelText = showNumbers ? `${seg.themeOrder}. ${themeName}` : themeName;
-        let fontSize = 34;
-        const minFontSize = 18;
-        const approxWidth = (text, size) => text.length * size * 0.55;
-        while (fontSize > minFontSize && approxWidth(labelText, fontSize) > usableArc) {
-          fontSize -= 1;
-        }
-        return (
-          <text
-            key={`tl-${i}`}
-            fontFamily="Inter, Arial, sans-serif"
-            fontSize={fontSize}
-            fill="#111827"
-            pointerEvents="none"
-          >
-            <textPath href={`#${idInner(i)}`} startOffset="50%" textAnchor="middle">
-              {labelText}
-            </textPath>
-          </text>
-        );
+        const layout = innerLabelLayouts[i];
+        if (!layout) return null;
+        const mid = (seg.a0 + seg.a1) / 2;
+        const [mx, my] = ellipsePoint(cx, cy, innerR0 + 0.5 * (innerR1 - innerR0), mid, ellipticalStretch);
+        const isBottom = my > cy;
+        return layout.lines.map((line, lineIdx) => {
+          const pathIdx = isBottom ? layout.lines.length - 1 - lineIdx : lineIdx;
+          return (
+            <text
+              key={`tl-${i}-${lineIdx}`}
+              fontFamily="Inter, Arial, sans-serif"
+              fontSize={layout.fontSize}
+              fill="#111827"
+              pointerEvents="none"
+            >
+              <textPath href={`#${idInner(i, pathIdx)}`} startOffset="50%" textAnchor="middle">
+                {line}
+              </textPath>
+            </text>
+          );
+        });
       })}
 
       {/* Outer barrier ring */}
@@ -360,7 +427,7 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
         const rot = uprightRotationDegrees(mid, finalFlip);
 
         // Available width ≈ chord length at rLabel times a margin
-        const chord = 2 * rLabel * Math.sin(spanPadded / 2);
+        const chord = 4 * rLabel * Math.sin(spanPadded / 2);
         const avail = Math.max(60, chord * 1.4);
 
         // Radial fit guard: ensure the stacked lines stay within the ring thickness (asymmetric margin)
