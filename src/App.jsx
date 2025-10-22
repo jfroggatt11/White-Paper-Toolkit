@@ -24,7 +24,7 @@ export default function App() {
         await exportRaster(node, {
           filename: baseName,
           format,
-          scale: 2,
+          scale: 4,               // boost raster export quality (approx 1200dpi)
           background: "transparent",
         });
       }
@@ -38,7 +38,7 @@ export default function App() {
   return (
     <div style={{ padding: 16, background: "transparent", minHeight: "100vh" }}>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 12 }}>
-        <h1 style={{ margin: 0, fontSize: 18, flexGrow: 1 }}>PDATF – Publication Diagram (A4)</h1>
+        <h1 style={{ margin: 0, fontSize: 18, flexGrow: 1 }}>PDATF – Square Export (A4 Width)</h1>
 
         <label style={{ display: "flex", flexDirection: "column", fontSize: 12, color: "#475569" }}>
           Ring selection
@@ -91,14 +91,13 @@ export default function App() {
         </button>
       </div>
 
-      {/* A4 portrait: 2480×3508 @ ~300dpi; stretch helps label fit */}
+      {/* Square export: 2480×2480 @ ~300dpi; stretch keeps rings circular */}
       <div style={{ overflow: "auto", border: "1px solid #e5e7eb", borderRadius: 12, background: "transparent" }}>
         <PDATFRingExport
           ref={svgRef}
           variant="B"               // "A" interactive-style, "B" publication, "C" mono, "D" focus
           focusThemeId={null}      // e.g. "risk-ethics-and-assurance" for variant D
           width={2480}
-          height={3508}
           ellipticalStretch={1}    // keep rings perfectly circular
           includeLegend={true}
           showCounts={true}

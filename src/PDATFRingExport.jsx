@@ -3,7 +3,7 @@
 // with correct alignment and export-friendly SVG.
 //
 // Usage example:
-// <PDATFRingExport variant="B" focusThemeId={null} width={2480} height={3508} ellipticalStretch={1.25} />
+// <PDATFRingExport variant="B" focusThemeId={null} width={2480} ellipticalStretch={1.25} />
 //
 // Notes:
 // - START_ANGLE and CLOCKWISE can be adjusted if your existing App.jsx uses a different orientation.
@@ -89,8 +89,8 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
   const {
     variant = "B",                // "A" | "B" | "C" | "D"
     focusThemeId = null,          // for variant D
-    width = 2480,                 // A4 @300dpi: 2480x3508
-    height = 3508,
+    width: widthInput = 2480,     // square output defaults to A4 width @300dpi
+    height: heightInput = undefined,
     ellipticalStretch = 1.0,      // >1 stretches vertically
     includeLegend = true,
     showCounts = true,
@@ -166,14 +166,23 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
     }
 
     return { themesOrdered, themeIds, byTheme, barrierCounts, innerSegments, outerSegments, totalBarriers, themeOrientationOverride };
-  }, [variant, focusThemeId, ellipticalStretch, width, height, barriers, barrierThemes, resources]);
+  }, [variant, focusThemeId, ellipticalStretch, widthInput, heightInput, barriers, barrierThemes, resources]);
 
-  const W = width, H = height; // portrait A4
+  const W = widthInput;
+  const H = (heightInput ?? widthInput);
   const cx = Math.floor(W / 2), cy = Math.floor(H / 2);
 
-  // Radii tuned for A4 portrait
-  const innerR0 = 300, innerR1 = 560;    // inner theme ring
-  const outerR0 = 620, outerR1 = 1240;   // outer barrier ring
+  // Radii scale dynamically with the smaller canvas dimension so the ring stays square-friendly.
+  const size = Math.min(W, H);
+  const ringMargin = size * 0.015;                  // keep a bit of breathing room for strokes
+  const outerThickness = size * 0.25;               // preserves original visual proportions
+  const innerThickness = size * 0.105;
+  const interRingGap = size * 0.024;
+
+  const outerR1 = Math.max(size / 2 - ringMargin, 0);
+  const outerR0 = Math.max(outerR1 - outerThickness, 0);
+  const innerR1 = Math.max(outerR0 - interRingGap, 0);
+  const innerR0 = Math.max(innerR1 - innerThickness, 0);
 
 
   const TEXT_PAD_DEG = 2; // shrink label arc by ±7°
