@@ -3,6 +3,9 @@ import RESOURCES from "./data/resources.json";
 import THEMES_RAW from "./data/barrier_themes.json";
 import BARRIERS_RAW from "./data/barriers.json";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer} from "recharts";
+import { lighten } from "./utils/colors";
+import { toArray, normalizeResource } from "./utils/dataTransform";
+import { parseURLParams, updateBrowserURL } from "./utils/urlState";
 
 const PERSONAS = ["Project", "Programme", "Business"];
 const RAD = Math.PI / 180;
@@ -17,29 +20,6 @@ const THEME_COLORS = {
   "risk-ethics-and-assurance": "#ef4444", // red-500
 };
 
-// Lighten a hex colour by amt (0..1 -> lighter)
-function lighten(hex, amt = 0.3) {
-  let c = hex?.replace("#", "") || "64748b";
-  if (c.length === 3) c = c.split("").map(ch => ch + ch).join("");
-  const n = parseInt(c, 16);
-  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-  r = Math.min(255, Math.round(r + (255 - r) * amt));
-  g = Math.min(255, Math.round(g + (255 - g) * amt));
-  b = Math.min(255, Math.round(b + (255 - b) * amt));
-  const h = (v) => v.toString(16).padStart(2, "0");
-  return `#${h(r)}${h(g)}${h(b)}`;
-}
-
-
-// ---- Normalisation helpers (robust to CSV variations) ----
-const toArray = (v) => Array.isArray(v) ? v : (typeof v === "string" ? v.split("|").map(s => s.trim()).filter(Boolean) : []);
-const normalizeResource = (r) => ({
-  ...r,
-  personas: toArray(r.personas),
-  barriers: toArray(r.barriers),
-  tags: toArray(r.tags),
-  barrier_category: r.barrier_category || r.barrier_theme || "",
-});
 
 export default function App() {
   const [search, setSearch] = useState("");
@@ -62,24 +42,19 @@ export default function App() {
 
   // URL ↔ state
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    const q = (p.get("q") || "").trim();
-    const theme = p.get("theme");
-    const barrier = p.get("barrier");
-    const personas = (p.get("personas") || "").split(",").filter(Boolean);
-    if (q) setSearch(q);
-    if (theme) setSelectedTheme(theme);
-    if (barrier) setSelectedBarrier(barrier);
-    if (personas.length) setSelectedPersonas(personas);
+    const params = parseURLParams();
+    if (params.search) setSearch(params.search);
+    if (params.theme) setSelectedTheme(params.theme);
+    if (params.barrier) setSelectedBarrier(params.barrier);
+    if (params.personas.length) setSelectedPersonas(params.personas);
   }, []);
   useEffect(() => {
-    const p = new URLSearchParams();
-    if (search) p.set("q", search);
-    if (selectedTheme) p.set("theme", selectedTheme);
-    if (selectedBarrier) p.set("barrier", selectedBarrier);
-    if (selectedPersonas.length) p.set("personas", selectedPersonas.join(","));
-    const url = `${window.location.pathname}?${p.toString()}`;
-    window.history.replaceState({}, "", url);
+    updateBrowserURL({
+      search,
+      theme: selectedTheme,
+      barrier: selectedBarrier,
+      personas: selectedPersonas
+    });
   }, [search, selectedTheme, selectedBarrier, selectedPersonas]);
 
   // SINGLE-SELECTION behaviour

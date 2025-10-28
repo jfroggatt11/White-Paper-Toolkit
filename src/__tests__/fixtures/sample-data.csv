@@ -1,0 +1,4 @@
+id,title,url,date,description,personas,barriers,barrier_theme,tags,publisher,type
+1,Data Strategy Guide,https://example.com/data-strategy,2024-01-15,A comprehensive guide to developing data strategy,Project|Programme,barrier1|barrier2,leadership-and-alignment,strategy|planning|data,PDATF,Guide
+2,Technical Implementation Best Practices,https://example.com/tech-impl,2024-02-20,Best practices for implementing technical solutions,Project,barrier3,digital-and-tech-constraints,technical|implementation,Tech Org,Whitepaper
+3,Business Case Development,https://example.com/business-case,2024-03-10,How to develop a compelling business case,Business,barrier4,procurement-and-commercial-models,business|planning,Consulting Firm,Template

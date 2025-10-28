@@ -1,0 +1,41 @@
+[
+  {
+    "id": "1",
+    "title": "Data Strategy Guide",
+    "url": "https://example.com/data-strategy",
+    "date": "2024-01-15",
+    "description": "A comprehensive guide to developing data strategy",
+    "personas": ["Project", "Programme"],
+    "barriers": ["barrier1", "barrier2"],
+    "barrier_category": "leadership-and-alignment",
+    "tags": ["strategy", "planning", "data"],
+    "publisher": "PDATF",
+    "type": "Guide"
+  },
+  {
+    "id": "2",
+    "title": "Technical Implementation Best Practices",
+    "url": "https://example.com/tech-impl",
+    "date": "2024-02-20",
+    "description": "Best practices for implementing technical solutions",
+    "personas": ["Project"],
+    "barriers": ["barrier3"],
+    "barrier_category": "digital-and-tech-constraints",
+    "tags": ["technical", "implementation"],
+    "publisher": "Tech Org",
+    "type": "Whitepaper"
+  },
+  {
+    "id": "3",
+    "title": "Business Case Development",
+    "url": "https://example.com/business-case",
+    "date": "2024-03-10",
+    "description": "How to develop a compelling business case",
+    "personas": ["Business"],
+    "barriers": ["barrier4"],
+    "barrier_category": "procurement-and-commercial-models",
+    "tags": ["business", "planning"],
+    "publisher": "Consulting Firm",
+    "type": "Template"
+  }
+]
