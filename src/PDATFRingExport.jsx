@@ -24,6 +24,14 @@ const PALETTE = {
   "risk-ethics-and-assurance": "#ef4444",
 };
 
+// Optional manual overrides for tricky inner theme labels
+const INNER_LABEL_LINE_OVERRIDES = {
+  "procurement-and-commercial-models": ({ themeOrder, showNumbers }) => {
+    const prefix = showNumbers ? `${themeOrder}. ` : "";
+    return [`${prefix}Procurement`, "& Commercial", "Models"];
+  },
+};
+
 // Tweak if your App.jsx uses a different layout basis
 const START_ANGLE = -Math.PI / 2; // 12 o'clock
 const CLOCKWISE = true;            // true = clockwise, false = anticlockwise
@@ -296,12 +304,13 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
   const idOuter = (i) => `outer-arc-${i}`;
 
   const innerLabelLayouts = useMemo(() => {
-    const INNER_FONT_MAX = 44;
+    const INNER_FONT_MAX = 40; // slightly lower cap keeps longer theme titles from clipping
     const MAX_INNER_LINES = 3;
     return data.innerSegments.map((seg) => {
       const theme = data.themesOrdered.find((t) => t.id === seg.themeId);
       const themeName = (theme?.name || "").trim();
       const labelText = showNumbers ? `${seg.themeOrder}. ${themeName}` : themeName;
+      const overrideLines = INNER_LABEL_LINE_OVERRIDES[seg.themeId]?.({ themeOrder: seg.themeOrder, showNumbers });
       const baseRadius = innerR0 + 0.55 * (innerR1 - innerR0);
       const margin = 22;
       const approxWidth = (text, size) => text.length * size * 0.6;
@@ -310,7 +319,7 @@ const PDATFRingExport = forwardRef(function PDATFRingExportComponent(props, ref)
 
       let fallback = null;
       for (let font = INNER_FONT_MAX; font >= 14; font -= 1) {
-        let linesCandidate = wrapToLines(labelText, arcLength(baseRadius) * 0.94, MAX_INNER_LINES, font);
+        let linesCandidate = overrideLines || wrapToLines(labelText, arcLength(baseRadius) * 0.94, MAX_INNER_LINES, font);
         if (!linesCandidate.length) linesCandidate = [labelText || ""];
         const lineGap = font * (linesCandidate.length > 1 ? 1.06 : 1.0);
         const n = linesCandidate.length || 1;
