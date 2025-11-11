@@ -541,7 +541,7 @@ export default function App() {
       {/* Small header with just title */}
       <header ref={headerRef} className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur text-white py-2 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">PDATF Toolkit</h1>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">PDATF Barrier Toolkit</h1>
         </div>
       </header>
 
