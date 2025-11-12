@@ -13,48 +13,7 @@ import { register as registerServiceWorker } from "./utils/serviceWorkerRegistra
 const PERSONAS = ["Project", "Programme", "Business"];
 const RAD = Math.PI / 180;
 
-// --- Memoized Cell Components for Performance ---
-const ThemeCell = React.memo(({ data, selectedTheme, selectedBarrier, themeFill, toggleTheme, handleMouseEnterTheme, handleMouseLeave }) => {
-  return (
-    <Cell
-      key={data.id}
-      className="cursor-pointer"
-      fill={themeFill(data.id, selectedTheme === data.id)}
-      opacity={
-        selectedTheme
-          ? (selectedTheme === data.id ? 1 : 0.35)
-          : (selectedBarrier ? 0.35 : 1)
-      }
-      onClick={() => toggleTheme(data.id)}
-      onMouseEnter={handleMouseEnterTheme}
-      onMouseLeave={handleMouseLeave}
-    />
-  );
-});
-ThemeCell.displayName = 'ThemeCell';
-
-const BarrierCell = React.memo(({ data, selectedBarrier, selectedTheme, barrierFills, toggleBarrier, handleMouseEnterBarrier, handleMouseLeave }) => {
-  return (
-    <Cell
-      key={data.id}
-      className="cursor-pointer"
-      fill={
-        selectedBarrier === data.id
-          ? (THEME_COLORS[data.themeId] || "#334155")
-          : (barrierFills.get(data.id) || "#e5e7eb")
-      }
-      opacity={
-        selectedBarrier
-          ? (selectedBarrier === data.id ? 1 : 0.3)
-          : (selectedTheme ? (data.themeId === selectedTheme ? 1 : 0.3) : 1)
-      }
-      onClick={() => toggleBarrier(data.id, data.themeId)}
-      onMouseEnter={handleMouseEnterBarrier}
-      onMouseLeave={handleMouseLeave}
-    />
-  );
-});
-BarrierCell.displayName = 'BarrierCell';
+// No need for memoized cell components - we'll render cells inline
 
 // --- Memoized Resource Item Component ---
 const ResourceItem = React.memo(({ resource, BARRIERS, THEME_COLORS, lighten }) => {
@@ -162,11 +121,21 @@ export default function App() {
 
   // SINGLE-SELECTION behaviour - memoize callbacks to prevent unnecessary re-renders
   const toggleTheme = React.useCallback((id) => {
-    setSelectedTheme((curr) => (curr === id ? null : id));
+    console.log('toggleTheme clicked:', id);
+    setSelectedTheme((curr) => {
+      const newValue = curr === id ? null : id;
+      console.log('selectedTheme changed from', curr, 'to', newValue);
+      return newValue;
+    });
     setSelectedBarrier(null); // clear barrier when picking a theme
   }, []);
   const toggleBarrier = React.useCallback((id, _themeId) => {
-    setSelectedBarrier((curr) => (curr === id ? null : id));
+    console.log('toggleBarrier clicked:', id, 'themeId:', _themeId);
+    setSelectedBarrier((curr) => {
+      const newValue = curr === id ? null : id;
+      console.log('selectedBarrier changed from', curr, 'to', newValue);
+      return newValue;
+    });
     setSelectedTheme(null); // clear theme when picking a barrier
   }, []);
   const togglePersona = React.useCallback((id) => setSelectedPersonas((curr) => (curr.includes(id) ? curr.filter((x) => x !== id) : [...curr, id])), []);
@@ -502,13 +471,15 @@ export default function App() {
   // Results list filter (honour single-selection)
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return DATA_RESOURCES.filter((r) => {
+    const results = DATA_RESOURCES.filter((r) => {
       const matchesText = !q || r.title.toLowerCase().includes(q) || r.description.toLowerCase().includes(q) || (r.tags || []).some((t) => t.toLowerCase().includes(q));
       const matchesPersonas = !selectedPersonas.length || r.personas.some((p) => selectedPersonas.includes(p));
       const matchesTheme = !selectedTheme || r.barrier_category === selectedTheme;
       const matchesBarrier = !selectedBarrier || r.barriers.includes(selectedBarrier);
       return matchesText && matchesPersonas && matchesTheme && matchesBarrier;
     }).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    console.log('Filtered results:', results.length, 'selectedBarrier:', selectedBarrier, 'selectedTheme:', selectedTheme);
+    return results;
   }, [DATA_RESOURCES, search, selectedPersonas, selectedTheme, selectedBarrier]);
 
   // Colours - memoize themeFill to prevent recreation
@@ -634,15 +605,18 @@ export default function App() {
                     className="hidden lg:block"
                   >
                     {themeData.map((d) => (
-                      <ThemeCell
+                      <Cell
                         key={d.id}
-                        data={d}
-                        selectedTheme={selectedTheme}
-                        selectedBarrier={selectedBarrier}
-                        themeFill={themeFill}
-                        toggleTheme={toggleTheme}
-                        handleMouseEnterTheme={handleMouseEnterTheme}
-                        handleMouseLeave={handleMouseLeave}
+                        className="cursor-pointer"
+                        fill={themeFill(d.id, selectedTheme === d.id)}
+                        opacity={
+                          selectedTheme
+                            ? (selectedTheme === d.id ? 1 : 0.35)
+                            : (selectedBarrier ? 0.35 : 1)
+                        }
+                        onClick={() => toggleTheme(d.id)}
+                        onMouseEnter={() => setHoveredLayer('theme')}
+                        onMouseLeave={() => setHoveredLayer(null)}
                       />
                     ))}
                   </Pie>
@@ -682,15 +656,22 @@ export default function App() {
                     strokeWidth={2}
                   >
                     {barrierData.map((d) => (
-                      <BarrierCell
+                      <Cell
                         key={d.id}
-                        data={d}
-                        selectedBarrier={selectedBarrier}
-                        selectedTheme={selectedTheme}
-                        barrierFills={barrierFills}
-                        toggleBarrier={toggleBarrier}
-                        handleMouseEnterBarrier={handleMouseEnterBarrier}
-                        handleMouseLeave={handleMouseLeave}
+                        className="cursor-pointer"
+                        fill={
+                          selectedBarrier === d.id
+                            ? (THEME_COLORS[d.themeId] || "#334155")
+                            : (barrierFills.get(d.id) || "#e5e7eb")
+                        }
+                        opacity={
+                          selectedBarrier
+                            ? (selectedBarrier === d.id ? 1 : 0.3)
+                            : (selectedTheme ? (d.themeId === selectedTheme ? 1 : 0.3) : 1)
+                        }
+                        onClick={() => toggleBarrier(d.id, d.themeId)}
+                        onMouseEnter={() => setHoveredLayer('barrier')}
+                        onMouseLeave={() => setHoveredLayer(null)}
                       />
                     ))}
                   </Pie>
